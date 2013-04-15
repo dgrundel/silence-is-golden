@@ -10,7 +10,7 @@
     class SilenceIsGolden {
         public function __construct() {
             //bring the noise. Err, no, don't do that.
-            add_action('init', array(&$this, 'remove_support'));
+            add_action('init', array(&$this, 'remove_support'), 9999);
         }
 
         public function remove_support() {
