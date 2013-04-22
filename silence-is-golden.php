@@ -10,7 +10,7 @@
     class SilenceIsGolden {
         public function __construct() {
             //bring the noise. Err, no, don't do that.
-            add_action('init', array(&$this, 'end_of_discussion'));
+            register_activation_hook( __FILE__, array( &$this, 'end_of_discussion' ) );
         }
 
         public function end_of_discussion() {
