@@ -10,21 +10,18 @@
     class SilenceIsGolden {
         public function __construct() {
             //bring the noise. Err, no, don't do that.
-            add_action('init', array(&$this, 'remove_support'), 9999);
+            add_action('init', array(&$this, 'end_of_discussion'));
         }
 
-        public function remove_support() {
-            $types = $this->get_all_post_types();
-            $supports = array('comments', 'trackbacks');
-            foreach($types as $post_type) {
-                foreach($supports as $feature) {
-                    remove_post_type_support($post_type, $feature);
-                }
-            }
-        }
+        public function end_of_discussion() {
+            global $wpdb;
 
-        public function get_all_post_types() {
-            return get_post_types( array(), 'names');
+            //close discussion on all existing posts
+            $wpdb->query("UPDATE $wpdb->posts SET comment_status = 'closed', ping_status = 'closed'");
+
+            //default new posts to no discussion
+            update_option('default_comment_status', 'closed');
+            update_option('default_ping_status', 'closed');
         }
     }
 
